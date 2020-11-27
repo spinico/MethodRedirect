@@ -1,0 +1,68 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30717.126
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MethodRedirect", "Sources\MethodRedirect.csproj", "{2A84DC12-471E-492F-B390-DF3ADB452E28}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MethodRedirect_UT", "UnitTests\MethodRedirect_UT.csproj", "{00E407AA-6593-469B-A697-00CFE7490E21}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5D6D3267-F44E-40E2-ADC3-20DDC4DE3E39}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{E3BA3202-B3CC-41C8-ABF6-ED10A792DB4C}"
+	ProjectSection(SolutionItems) = preProject
+		Assets\Images\method-descriptor.gif = Assets\Images\method-descriptor.gif
+		Assets\Images\methodtable-fixed-layout.png = Assets\Images\methodtable-fixed-layout.png
+		Assets\Images\methodtable_layout.gif = Assets\Images\methodtable_layout.gif
+		Assets\Images\methodtable_layout_example.gif = Assets\Images\methodtable_layout_example.gif
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2A84DC12-471E-492F-B390-DF3ADB452E28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A84DC12-471E-492F-B390-DF3ADB452E28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A84DC12-471E-492F-B390-DF3ADB452E28}.Debug|x64.ActiveCfg = Debug|x64
+		{2A84DC12-471E-492F-B390-DF3ADB452E28}.Debug|x64.Build.0 = Debug|x64
+		{2A84DC12-471E-492F-B390-DF3ADB452E28}.Debug|x86.ActiveCfg = Debug|x86
+		{2A84DC12-471E-492F-B390-DF3ADB452E28}.Debug|x86.Build.0 = Debug|x86
+		{2A84DC12-471E-492F-B390-DF3ADB452E28}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A84DC12-471E-492F-B390-DF3ADB452E28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A84DC12-471E-492F-B390-DF3ADB452E28}.Release|x64.ActiveCfg = Release|x64
+		{2A84DC12-471E-492F-B390-DF3ADB452E28}.Release|x64.Build.0 = Release|x64
+		{2A84DC12-471E-492F-B390-DF3ADB452E28}.Release|x86.ActiveCfg = Release|x86
+		{2A84DC12-471E-492F-B390-DF3ADB452E28}.Release|x86.Build.0 = Release|x86
+		{00E407AA-6593-469B-A697-00CFE7490E21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00E407AA-6593-469B-A697-00CFE7490E21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00E407AA-6593-469B-A697-00CFE7490E21}.Debug|x64.ActiveCfg = Debug|x64
+		{00E407AA-6593-469B-A697-00CFE7490E21}.Debug|x64.Build.0 = Debug|x64
+		{00E407AA-6593-469B-A697-00CFE7490E21}.Debug|x86.ActiveCfg = Debug|x86
+		{00E407AA-6593-469B-A697-00CFE7490E21}.Debug|x86.Build.0 = Debug|x86
+		{00E407AA-6593-469B-A697-00CFE7490E21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00E407AA-6593-469B-A697-00CFE7490E21}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00E407AA-6593-469B-A697-00CFE7490E21}.Release|x64.ActiveCfg = Release|x64
+		{00E407AA-6593-469B-A697-00CFE7490E21}.Release|x64.Build.0 = Release|x64
+		{00E407AA-6593-469B-A697-00CFE7490E21}.Release|x86.ActiveCfg = Release|x86
+		{00E407AA-6593-469B-A697-00CFE7490E21}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E3BA3202-B3CC-41C8-ABF6-ED10A792DB4C} = {5D6D3267-F44E-40E2-ADC3-20DDC4DE3E39}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CD65340E-E5E2-4031-B5C2-B7024FA40B35}
+	EndGlobalSection
+EndGlobal
