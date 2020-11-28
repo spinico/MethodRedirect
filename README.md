@@ -1,12 +1,10 @@
 ## MethodRedirect
 
-MethodRedirect is a C# extension that can be used to redirect a method to another using reflection. 
+MethodRedirect is a `MethodInfo` extension written in C# that can be used to redirect a method call to another using reflection. 
 
 This implementation uses marshalling to modify the address of the corresponding *Method Descriptor* without the need to use *unsafe* block.
 
-This project was inspired by [one of the answers](https://stackoverflow.com/a/55026523/5953306) given for [this question on StackOverflow](https://stackoverflow.com/questions/7299097/dynamically-replace-the-contents-of-a-c-sharp-method) on how to replace the content of a C# method. The answer does not provide much explanation on how it actually work or neither shows an example of use.   
-
-The following are development notes and references used to implement this project and hopefully explain how it works too.
+This project was inspired by [one of the answers](https://stackoverflow.com/a/55026523/5953306) given for [this question](https://stackoverflow.com/questions/7299097/dynamically-replace-the-contents-of-a-c-sharp-method) on StackOverflow about replacing the content of a C# method. The answer did not provide sufficient explanation on how it actually works and neither shows an example of its usage.The following are development notes and references used to implement this project and hopefully explain how it works too.
 
 ##### From the CLR documentation:
 
@@ -48,17 +46,17 @@ The following are development notes and references used to implement this projec
 
     ![Method Descriptor](./Assets/Images/method-descriptor.gif)
 
-    Method Descriptor (`MethodDesc`) is an encapsulation of method implementation as the CLR knows it.
+    - Method Descriptor (`MethodDesc`) is an encapsulation of method implementation as the CLR knows it.
 
-    Each `MethodDesc` is padded with a `PreJitStub`, which is responsible for triggering JIT compilation. 
+    - Each `MethodDesc` is padded with a `PreJitStub`, which is responsible for triggering JIT compilation. 
 
-    The method table slot entry actually points to the stub instead of the actual MethodDesc data structure. This is at a negative offset of 5 bytes from the actual `MethodDesc` and is part of **the 8-byte padding every method inherits**.
+    - The method table slot entry actually points to the stub instead of the actual MethodDesc data structure. This is at a negative offset of 5 bytes from the actual `MethodDesc` and is part of **the 8-byte padding every method inherits**.
 
-    `MethodDesc` is always 5 bytes after the location pointed by the `Method Slot Table` entry. After the compilation is complete, the 5 bytes containing the call instruction will be overwritten with an unconditional jump to the JIT-compiled code.
+    - `MethodDesc` is always 5 bytes after the location pointed by the `Method Slot Table` entry. After the compilation is complete, the 5 bytes containing the call instruction will be overwritten with an unconditional jump to the JIT-compiled code.
 
-    The `Flags` field in the method descriptor is encoded to contain the information about the type of the method, such as static, instance, interface method, or COM implementation. The `Flags` field is represented on 3-bit [0-7] and can be one of the [MethodClassification](https://github.com/dotnet/coreclr/blob/master/src/vm/method.hpp#L90) enumeration value.
+    - The `Flags` field in the method descriptor is encoded to contain the information about the type of the method, such as static, instance, interface method, or COM implementation. The `Flags` field is represented on 3-bit [0-7] and can be one of the [MethodClassification](https://github.com/dotnet/coreclr/blob/master/src/vm/method.hpp#L90) enumeration value.
 
-    [**UPDATE**] *The method descriptor structure shows a `Slot Number` field of 2 bytes, which correspond to a maximum of 255 per class. This must be incorrect as this number can be much larger. So the field must take 3 bytes by using the first byte of the following `Flags` field's 2 bytes.*
+    	[**UPDATE**] *The method descriptor structure shows a `Slot Number` field of 2 bytes, which correspond to a maximum of 255 per type. This must be incorrect as this number can be much larger. A reasonable assumption is that the field must take 3 bytes by using the first byte of the following `Flags` field.*
 
 #### References
 
