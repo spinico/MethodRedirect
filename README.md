@@ -58,6 +58,10 @@ This project was inspired by [one of the answers](https://stackoverflow.com/a/55
 
     	[**UPDATE**] *The method descriptor structure shows a `Slot Number` field of 2 bytes, which correspond to a maximum of 255 per type. This must be incorrect as this number can be much larger. A reasonable assumption is that the field must take 3 bytes by using the first byte of the following `Flags` field.*
 
+#### Remarks
+
+  - Calling a redirected static method using a direct function call may return a cached result. An alternative approach is to call the static function using the `Invoke` method of the corresponding `MethodInfo`.
+
 #### References
 
    - [.NET Framework Internals: How the CLR Creates Runtime Objects](https://docs.microsoft.com/en-us/archive/msdn-magazine/2005/may/net-framework-internals-how-the-clr-creates-runtime-objects)
