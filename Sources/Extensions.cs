@@ -79,7 +79,7 @@ namespace MethodRedirect
                     Marshal.ReadIntPtr(ms).ToString("x").PadLeft(8,'0'),
                     ms.ToString("x").PadLeft(8,'0')); 
 
-                // Get the slot number of the virtual method entry from the MethodDesc data structure
+                // To get the slot number of the virtual method entry from the MethodDesc data structure
                 //
                 //  a. Get the value at the address of the MethodDescriptor 
                 //
@@ -88,8 +88,8 @@ namespace MethodRedirect
                 //    MethodDescriptor -> | Token Remainder         | 2 bytes
                 //                        | Chunck Index            | 1 bytes  
                 //    MethodTableSlot  -> | Stub (op code + target) | 5 bytes
-                //                        | Slot Number             | 2 bytes => 3 bytes
-                //                        | Flags                   | 2 bytes => 1 byte
+                //                        | Slot Number             | 2 bytes
+                //                        | Flags                   | 2 bytes
                 //                        | CodeOrIL                | 4 bytes
                 //                        ---------------------------      
                 //
@@ -97,7 +97,7 @@ namespace MethodRedirect
                 //  c. Mask the slot number field to get its value  
 
                 long shift = Marshal.ReadInt64(md) >> 32;
-                ushort mask = 0xfff; // The slot number can be larger than 255, so using a mask of 3 bytes (instead of 2)
+                ushort mask = 0xffff; // 16 bit (2 bytes) mask for the slot number value
                 int slot = (int)(shift & mask);
 
                 Console.WriteLine("\nMethodDesc data       : {0}", Marshal.ReadInt64(md).ToString("x").PadLeft(8,'0'));
@@ -137,9 +137,9 @@ namespace MethodRedirect
         /// <returns>The JITed method address</returns>
         private static IntPtr GetMethodAddress(MethodInfo mi)
         {
-            const ushort SLOT_NUMBER_MASK = 0xfff; // 3 bytes mask
-            const int MT_OFFSET_32BIT = 0x28; // 40 bytes
-            const int MT_OFFSET_64BIT = 0x40; // 64 bytes
+            const ushort SLOT_NUMBER_MASK = 0xffff; // 2 bytes mask
+            const int MT_OFFSET_32BIT = 0x28;       // 40 bytes offset
+            const int MT_OFFSET_64BIT = 0x40;       // 64 bytes offset
 
             IntPtr address;
 
@@ -161,7 +161,6 @@ namespace MethodRedirect
                 IntPtr ms = Marshal.ReadIntPtr(mt + offset);
 
                 // Get the slot number of the virtual method entry from the MethodDesc data structure
-                // Remark: the slot number is represented on 3 bytes
                 long shift = Marshal.ReadInt64(md) >> 32;
                 int slot = (int)(shift & SLOT_NUMBER_MASK);
                 

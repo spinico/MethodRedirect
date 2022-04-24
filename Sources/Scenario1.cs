@@ -17,7 +17,7 @@ namespace MethodRedirect
             MethodInfo Scenario_InternalInstanceMethod = Scenario_Type.GetMethod("InternalInstanceMethod", BindingFlags.Instance | BindingFlags.NonPublic);
             MethodInfo Scenario_PrivateInstanceMethod = Scenario_Type.GetMethod("PrivateInstanceMethod", BindingFlags.Instance | BindingFlags.NonPublic);
 
-            var token = Scenario_InternalInstanceMethod.RedirectTo(Scenario_PrivateInstanceMethod);
+            var token = Scenario_InternalInstanceMethod.RedirectTo(Scenario_PrivateInstanceMethod, true);
 
             // Using "dynamic" type to resolve the following issue in x64 and Release (with code optimizations) builds.
             //

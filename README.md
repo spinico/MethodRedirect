@@ -50,13 +50,12 @@ This project was inspired by [one of the answers](https://stackoverflow.com/a/55
 
     - Each `MethodDesc` is padded with a `PreJitStub`, which is responsible for triggering JIT compilation. 
 
-    - The method table slot entry actually points to the stub instead of the actual MethodDesc data structure. This is at a negative offset of 5 bytes from the actual `MethodDesc` and is part of **the 8-byte padding every method inherits**.
+    - The `Method Table Slot` entry actually points to the stub instead of the actual `MethodDesc` data structure. This is at a negative offset of 5 bytes from the actual `MethodDesc` and is part of **the 8-byte padding every method inherits**.
 
-    - `MethodDesc` is always 5 bytes after the location pointed by the `Method Slot Table` entry. After the compilation is complete, the 5 bytes containing the call instruction will be overwritten with an unconditional jump to the JIT-compiled code.
+    - `MethodDesc` is always 5 bytes after the location pointed by the `Method Table Slot` entry. After the compilation is complete, the 5 bytes containing the call instruction will be overwritten with an unconditional jump to the JIT-compiled code.
 
     - The `Flags` field in the method descriptor is encoded to contain the information about the type of the method, such as static, instance, interface method, or COM implementation. The `Flags` field is represented on 3-bit [0-7] and can be one of the [MethodClassification](https://github.com/dotnet/coreclr/blob/master/src/vm/method.hpp#L90) enumeration value.
 
-    	[**UPDATE**] *The method descriptor structure shows a `Slot Number` field of 2 bytes, which correspond to a maximum of 255 per type. This must be incorrect as this number can be much larger. A reasonable assumption is that the field must take 3 bytes by using the first byte of the following `Flags` field.*
 
 #### Remarks
 
