@@ -87,6 +87,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Scenario5_UnitTests.cs" />
     <Compile Include="Scenario4_UnitTests.cs" />
     <Compile Include="Scenario3_UnitTests.cs" />
     <Compile Include="Scenario2_UnitTests.cs" />

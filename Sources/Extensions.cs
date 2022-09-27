@@ -59,9 +59,9 @@ namespace MethodRedirect
             int offset = (int)((long)mt - (long)md);
 
             Console.WriteLine("Method is virtual     : {0}", mi.IsVirtual);
-            Console.WriteLine("MethodDescriptor (MD) : \t\t{0}", md.ToString("x").PadLeft(8, '0'));
-            Console.WriteLine("MethodTable (MT)      : \t\t{0}", mt.ToString("x").PadLeft(8,'0'));            
-            Console.WriteLine("Offset (MT - MD)      : \t\t{0}", offset.ToString("x").PadLeft(8, '0'));
+            Console.WriteLine("MethodDescriptor (MD) : \t{0}", md.ToString("x").PadLeft(8, '0'));
+            Console.WriteLine("MethodTable (MT)      : \t{0}", mt.ToString("x").PadLeft(8,'0'));            
+            Console.WriteLine("Offset (MT - MD)      : \t{0}", offset.ToString("x").PadLeft(8, '0'));
 
             if (mi.IsVirtual)
             {
@@ -74,7 +74,7 @@ namespace MethodRedirect
                 // This is the address of the first method of any type (i.e. ToString)
                 IntPtr ms = mt + offset;
               
-                Console.WriteLine("MethodTable offset    : \t\t{0}", offset.ToString("x").PadLeft(8, '0'));
+                Console.WriteLine("MethodTable offset    : \t{0}", offset.ToString("x").PadLeft(8, '0'));
                 Console.WriteLine("First method slot     : {0}\t{1}", 
                     Marshal.ReadIntPtr(ms).ToString("x").PadLeft(8,'0'),
                     ms.ToString("x").PadLeft(8,'0')); 

@@ -4,7 +4,7 @@ MethodRedirect is a `MethodInfo` extension written in C# that can be used to red
 
 This implementation uses marshalling to modify the address of the corresponding *Method Descriptor* without the need to use *unsafe* block.
 
-This project was inspired by [one of the answers](https://stackoverflow.com/a/55026523/5953306) given for [this question](https://stackoverflow.com/questions/7299097/dynamically-replace-the-contents-of-a-c-sharp-method) on StackOverflow about replacing the content of a C# method. The answer did not provide sufficient explanation on how it actually works and neither shows an example of its usage.The following are development notes and references used to implement this project and hopefully explain how it works too.
+This project was inspired by [one of the answers](https://stackoverflow.com/a/55026523/5953306) given for [this question](https://stackoverflow.com/questions/7299097/dynamically-replace-the-contents-of-a-c-sharp-method) on StackOverflow about replacing the content of a C# method. The answer did not provide sufficient explanation on how it actually works and neither shows an example of its usage. The following are development notes and references used to implement this project and hopefully explain how it works too.
 
 ##### From the CLR documentation:
 
@@ -60,6 +60,8 @@ This project was inspired by [one of the answers](https://stackoverflow.com/a/55
 #### Remarks
 
   - Calling a redirected static method using a direct function call may return a cached result. An alternative approach is to call the static function using the `Invoke` method of the corresponding `MethodInfo`.
+  
+  - For direct normal method call, the `MethodRedirection` instance returned from a call to the `RedirectTo` method can be used to revert the method redirection to the original address. However, it is not actually possible to revert a redirected method call that is made **within** another already compiled (JITted) method since the address of the redirected method call will remain unchanged in the compiled method. See the unit tests of **Scenario5** for more details on this behavior.
 
 #### References
 
