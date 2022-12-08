@@ -9,11 +9,6 @@ namespace MethodRedirect
             Console.ReadKey();
         }
 
-        internal virtual string InternalVirtualInstanceMethod()
-        {
-            return "MethodRedirect.Scenario4.InternalVirtualInstanceMethod";
-        }
-
         public virtual string PublicVirtualInstanceMethod()
         {
             return "MethodRedirect.Scenario4.PublicVirtualInstanceMethod";

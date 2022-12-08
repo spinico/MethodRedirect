@@ -8,6 +8,12 @@ namespace MethodRedirect
 {
     static class Extensions
     {
+        public static MethodOperation RedirectTo<T>(this MethodInfo origin, Func<T> target, bool verbose = false)
+            => RedirectTo(origin, target.Method, verbose);
+
+        public static MethodOperation RedirectTo<T, R>(this MethodInfo origin, Func<T, R> target, bool verbose = false)
+            => RedirectTo(origin, target.Method, verbose);
+
         /// <summary>
         /// Redirect origin method calls to the specified target method.
         /// Use redirection when there is no need to call the origin method when redirected to the target method.

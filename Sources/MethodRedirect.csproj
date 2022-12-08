@@ -91,6 +91,7 @@
     <Compile Include="MethodOperation.cs" />
     <Compile Include="MethodToken.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scenario6.cs" />
     <Compile Include="Scenario5.cs" />
     <Compile Include="Scenario4.cs" />
     <Compile Include="Scenario3.cs" />

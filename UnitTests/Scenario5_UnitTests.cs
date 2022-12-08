@@ -33,7 +33,7 @@ namespace Scenarios_UT
             var tokenGet = ScenarioBase_PrivateGetMinimumFeeMethod.RedirectTo(Scenario_PublicGetCustomFeeMethod);
             var tokenSet = ScenarioBase_PrivateSetMinimumFeeMethod.RedirectTo(Scenario_PublicSetCustomFeeMethod);
 
-            // Create instance of scenario with the redirected accessors
+            // Create instance of scenario
             var scenario = new Scenario5(); // (Scenario5)Activator.CreateInstance(Scenario_Type);
 
             // Test the "Get" accessor redirection

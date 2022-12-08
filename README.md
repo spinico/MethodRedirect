@@ -63,6 +63,8 @@ This project was inspired by [one of the answers](https://stackoverflow.com/a/55
   
   - For direct normal method call, the `MethodRedirection` instance returned from a call to the `RedirectTo` method can be used to revert the method redirection to the original address. However, it is not actually possible to revert a redirected method call that is made **within** another already compiled (JITted) method since the address of the redirected method call will remain unchanged in the compiled method. See the unit tests of **Scenario5** for more details on this behavior.
 
+  - Using lambda expression (see **Scenario6**'s unit tests), the method redirection works when the origin method is declared as `virtual`.
+
 #### References
 
    - [.NET Framework Internals: How the CLR Creates Runtime Objects](https://docs.microsoft.com/en-us/archive/msdn-magazine/2005/may/net-framework-internals-how-the-clr-creates-runtime-objects)
