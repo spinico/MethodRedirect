@@ -11,13 +11,12 @@ namespace MethodRedirect
             Console.WriteLine("Redirect : MethodRedirect.Scenario2.InternalVirtualInstanceMethod()");
             Console.WriteLine("To       : MethodRedirect.Scenario2.PrivateInstanceMethod()");            
 
-            Assembly assembly = Assembly.GetAssembly(typeof(Scenario2));
-            Type Scenario_Type = assembly.GetType("MethodRedirect.Scenario2");
+            Type Scenario_Type = typeof(Scenario2);
 
-            MethodInfo Scenario_InternalVirtualInstanceMethod = Scenario_Type.GetMethod("InternalVirtualInstanceMethod", BindingFlags.Instance | BindingFlags.NonPublic);
-            MethodInfo Scenario_PrivateInstanceMethod = Scenario_Type.GetMethod("PrivateInstanceMethod", BindingFlags.Instance | BindingFlags.NonPublic);
-
-            var token = Scenario_InternalVirtualInstanceMethod.RedirectTo(Scenario_PrivateInstanceMethod, true);
+            var token = MethodUtil.HookMethod(
+                MethodHook.From(Scenario_Type, "InternalVirtualInstanceMethod"),
+                MethodHook.From(Scenario_Type, "PrivateInstanceMethod")
+            );
 
             var scenario = (Scenario2)Activator.CreateInstance(Scenario_Type);
 

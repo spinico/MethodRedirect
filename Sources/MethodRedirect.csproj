@@ -88,16 +88,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MethodOperation.cs" />
+    <Compile Include="IMethodsHook.cs" />
+    <Compile Include="MethodHook.cs" />
+    <Compile Include="OriginalMethodsInfo.cs" />
     <Compile Include="MethodToken.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scenario6.cs" />
+    <Compile Include="PropertyHook.cs" />
     <Compile Include="Scenario5.cs" />
     <Compile Include="Scenario4.cs" />
     <Compile Include="Scenario3.cs" />
     <Compile Include="Scenario2.cs" />
     <Compile Include="Scenario1.cs" />
-    <Compile Include="Extensions.cs" />
+    <Compile Include="MethodUtil.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
