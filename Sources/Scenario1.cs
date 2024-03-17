@@ -8,16 +8,12 @@ namespace MethodRedirect
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Redirect : MethodRedirect.Scenario1.InternalInstanceMethod()");
-            Console.WriteLine("To       : MethodRedirect.Scenario1.PrivateInstanceMethod()");
+            Type Scenario_Type = typeof(Scenario1);
 
-            Assembly assembly = Assembly.GetAssembly(typeof(Scenario1));
-            Type Scenario_Type = assembly.GetType("MethodRedirect.Scenario1");
-
-            MethodInfo Scenario_InternalInstanceMethod = Scenario_Type.GetMethod("InternalInstanceMethod", BindingFlags.Instance | BindingFlags.NonPublic);
-            MethodInfo Scenario_PrivateInstanceMethod = Scenario_Type.GetMethod("PrivateInstanceMethod", BindingFlags.Instance | BindingFlags.NonPublic);
-
-            var token = Scenario_InternalInstanceMethod.RedirectTo(Scenario_PrivateInstanceMethod, true);
+            var token = MethodUtil.HookMethod(
+                MethodHook.From(Scenario_Type, "InternalInstanceMethod"),
+                MethodHook.From(Scenario_Type, "PrivateInstanceMethod")
+            );
 
             // Using "dynamic" type to resolve the following issue in x64 and Release (with code optimizations) builds.
             //
@@ -34,23 +30,23 @@ namespace MethodRedirect
 
             string methodName = scenario.InternalInstanceMethod();
 
-            Console.WriteLine("Call MethodRedirect.Scenario1.InternalInstanceMethod => {0}", methodName);
+            //Console.WriteLine("Call MethodRedirect.Scenario1.InternalInstanceMethod => {0}", methodName);
 
-            Debug.Assert(methodName == "MethodRedirect.Scenario1.PrivateInstanceMethod");
+            //Debug.Assert(methodName == "MethodRedirect.Scenario1.PrivateInstanceMethod");
 
             if (methodName == "MethodRedirect.Scenario1.PrivateInstanceMethod")
             {
-                Console.WriteLine("\nRestore...");
+                //Console.WriteLine("\nRestore...");
                 
                 token.Restore();
 
-                Console.WriteLine(token);
+                //Console.WriteLine(token);
 
                 methodName = scenario.InternalInstanceMethod();
 
-                Console.WriteLine("Call MethodRedirect.Scenario1.InternalInstanceMethod => {0}", methodName);
+                //Console.WriteLine("Call MethodRedirect.Scenario1.InternalInstanceMethod => {0}", methodName);
 
-                Debug.Assert(methodName == "MethodRedirect.Scenario1.InternalInstanceMethod");
+                //Debug.Assert(methodName == "MethodRedirect.Scenario1.InternalInstanceMethod");
 
                 if (methodName == "MethodRedirect.Scenario1.InternalInstanceMethod")
                 {
@@ -66,7 +62,7 @@ namespace MethodRedirect
                 Console.WriteLine("\nRedirection FAILED");
             }
 
-            Console.ReadKey();
+            //Console.ReadKey();
         }
         
         internal string InternalInstanceMethod()

@@ -11,14 +11,12 @@ namespace Scenarios_UT
         [TestMethod]
         public void Redirect_PublicVirtualInstanceMethod_To_PrivateInstanceMethod_DifferentInstance()
         {
-            Assembly assembly = Assembly.GetAssembly(typeof(Scenario4));
-            Type Scenario_Type = assembly.GetType("MethodRedirect.Scenario4");
-            Type ScenarioExt_Type = assembly.GetType("MethodRedirect.Scenario4Ext");
+            Type Scenario_Type = typeof(Scenario4);
 
-            MethodInfo Scenario_PublicVirtualInstanceMethod = Scenario_Type.GetMethod("PublicVirtualInstanceMethod", BindingFlags.Instance | BindingFlags.Public);
-            MethodInfo ScenarioExt_PrivateInstanceMethod = ScenarioExt_Type.GetMethod("PrivateInstanceMethod", BindingFlags.Instance | BindingFlags.NonPublic);
-
-            var token = Scenario_PublicVirtualInstanceMethod.RedirectTo(ScenarioExt_PrivateInstanceMethod);
+            var token = MethodUtil.HookMethod(
+                MethodHook.From(Scenario_Type, "PublicVirtualInstanceMethod"),
+                MethodHook.From(typeof(Scenario4Ext), "PrivateInstanceMethod")
+            );
 
             var scenario = (Scenario4)Activator.CreateInstance(Scenario_Type);
                        

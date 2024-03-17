@@ -1,18 +1,27 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace MethodRedirect
 {
-    static class Extensions
+    static class MethodUtil
     {
-        public static MethodOperation RedirectTo<T>(this MethodInfo origin, Func<T> target, bool verbose = false)
-            => RedirectTo(origin, target.Method, verbose);
+        public static OriginalMethodsInfo HookMethod(IMethodsHook orig, IMethodsHook hook)
+        {
+            OriginalMethodsInfo origins = new OriginalMethodsInfo();
+            var origMethods = orig.GetMethods().ToArray();
+            var hookMethods = hook.GetMethods().ToArray();
 
-        public static MethodOperation RedirectTo<T, R>(this MethodInfo origin, Func<T, R> target, bool verbose = false)
-            => RedirectTo(origin, target.Method, verbose);
+            for (int i = 0; i < Math.Min(origMethods.Length, hookMethods.Length); i++)
+            { 
+                RedirectTo(origins, origMethods[i], hookMethods[i]);
+            }
+            
+            return origins;
+        }
 
         /// <summary>
         /// Redirect origin method calls to the specified target method.
@@ -21,11 +30,18 @@ namespace MethodRedirect
         /// <param name="origin"></param>
         /// <param name="target"></param>
         /// <param name="verbose"></param>
-        /// <returns>
-        /// A MethodRedirection operation result object
-        /// </returns>
-        public static MethodOperation RedirectTo(this MethodInfo origin, MethodInfo target, bool verbose = false)
+        static void RedirectTo(OriginalMethodsInfo origins, MethodInfo origin, MethodInfo target)
         {
+            if (origin == null)
+            {
+                throw new ArgumentNullException("origin");
+            }
+            
+            if (target == null)
+            {
+                throw new ArgumentNullException("target");
+            }
+
             IntPtr ori = GetMethodAddress(origin);
             IntPtr tar = GetMethodAddress(target);
 
@@ -34,19 +50,7 @@ namespace MethodRedirect
             Debug.Assert(Marshal.ReadIntPtr(ori) == origin.MethodHandle.GetFunctionPointer());
             Debug.Assert(Marshal.ReadIntPtr(tar) == target.MethodHandle.GetFunctionPointer());
 
-            if (verbose)
-            {
-                Console.WriteLine("\nPlatform      : {0}", IntPtr.Size == 4 ? "x86" : "x64");
-                Console.WriteLine("IntPtr.Size   : {0}", IntPtr.Size);
-
-                Console.WriteLine("\nFrom origin method    : {0}", origin.Name);
-                OutputMethodDetails(origin, ori);
-
-                Console.WriteLine("\nTo target method      : {0}", target.Name);
-                OutputMethodDetails(target, tar);
-            }
-
-            return Redirect(ori, tar, verbose);
+            Redirect(origins, ori, tar);
         }
 
         /// <summary>
@@ -56,7 +60,7 @@ namespace MethodRedirect
         /// <param name="address">
         /// The unconditional jmp address to the JIT-compiled method
         /// </param>
-        private static void OutputMethodDetails(MethodInfo mi, IntPtr address)
+        static void OutputMethodDetails(MethodInfo mi, IntPtr address)
         {
             IntPtr mt = mi.DeclaringType.TypeHandle.Value; // MethodTable address
             IntPtr md = mi.MethodHandle.Value;             // MethodDescriptor address
@@ -141,7 +145,7 @@ namespace MethodRedirect
         ///   - the CodeOrIL field contains the Virtual Address (VA) of the JIT-compiled method.
         /// </remarks>
         /// <returns>The JITed method address</returns>
-        private static IntPtr GetMethodAddress(MethodInfo mi)
+        static IntPtr GetMethodAddress(MethodInfo mi)
         {
             const ushort SLOT_NUMBER_MASK = 0xffff; // 2 bytes mask
             const int MT_OFFSET_32BIT = 0x28;       // 40 bytes offset
@@ -183,25 +187,13 @@ namespace MethodRedirect
             return address;
         }
 
-        private static MethodRedirection Redirect(IntPtr ori, IntPtr tar, bool verbose)
+        static void Redirect(OriginalMethodsInfo origins, IntPtr ori, IntPtr tar)
         {            
+            origins.AddOrigin(ori);
+            
             // Must create the token before address is assigned
-            var token = new MethodRedirection(ori);
-
-            if (verbose)
-            {
-                Console.WriteLine("\nRedirect...");
-                Console.WriteLine("From {0} [{1}] => To {2} [{3}]",
-                    ori.ToString("x").PadLeft(8, '0'),
-                    Marshal.ReadIntPtr(ori).ToString("x").PadLeft(8, '0'),
-                    tar.ToString("x").PadLeft(8, '0'),
-                    Marshal.ReadIntPtr(tar).ToString("x").PadLeft(8, '0'));
-            }
-
             // Redirect origin method to target method            
             Marshal.Copy(new IntPtr[] { Marshal.ReadIntPtr(tar) }, 0, ori, 1);
-
-            return token;
         }
     }
 }

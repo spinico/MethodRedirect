@@ -12,14 +12,12 @@ namespace Scenarios_UT
         [TestMethod]
         public void Redirect_PublicVirtualInstanceMethodWithParameter_To_PrivateInstanceMethodWithParameter_DifferentInstance()
         {
-            Assembly assembly = Assembly.GetAssembly(typeof(Scenario6));
-            Type Scenario_Type = assembly.GetType("MethodRedirect.Scenario6");
-            Type ScenarioExt_Type = assembly.GetType("MethodRedirect.Scenario6Ext");
+            Type Scenario_Type = typeof(Scenario6);
 
-            MethodInfo Scenario_PublicVirtualInstanceMethodWithParameter = Scenario_Type.GetMethod("PublicVirtualInstanceMethodWithParameter", BindingFlags.Instance | BindingFlags.Public);
-            MethodInfo ScenarioExt_PrivateInstanceMethodWithParameter = ScenarioExt_Type.GetMethod("PrivateInstanceMethodWithParameter", BindingFlags.Instance | BindingFlags.NonPublic);
-
-            var token = Scenario_PublicVirtualInstanceMethodWithParameter.RedirectTo(ScenarioExt_PrivateInstanceMethodWithParameter);
+            var token = MethodUtil.HookMethod(
+                MethodHook.From(Scenario_Type, "PublicVirtualInstanceMethodWithParameter"),
+                MethodHook.From(typeof(Scenario6Ext), "PrivateInstanceMethodWithParameter")
+            );
 
             var scenario = (Scenario6)Activator.CreateInstance(Scenario_Type);
 
@@ -38,16 +36,15 @@ namespace Scenarios_UT
         [TestMethod]
         public void Redirect_PublicVirtualInstanceMethod_To_Lambda_NoParameter()
         {
-            Assembly assembly = Assembly.GetAssembly(typeof(Scenario6));
-            Type Scenario_Type = assembly.GetType("MethodRedirect.Scenario6");
+            Type Scenario_Type = typeof(Scenario6);
 
-            MethodInfo Scenario_PublicVirtualInstanceMethod = Scenario_Type.GetMethod("PublicVirtualInstanceMethod", BindingFlags.Instance | BindingFlags.Public);
-
-            // Test redirection to lambda expression (no parameter)
-            var token = Scenario_PublicVirtualInstanceMethod.RedirectTo(() =>
-            {
-                return "MethodRedirect.LambdaExpression.NoParameter";
-            });
+            var token = MethodUtil.HookMethod(
+                MethodHook.From(Scenario_Type, "PublicVirtualInstanceMethod"),
+                MethodHook.From(() =>
+                {
+                    return "MethodRedirect.LambdaExpression.NoParameter";
+                })
+            );
 
             var scenario = (Scenario6)Activator.CreateInstance(Scenario_Type);
 
@@ -61,20 +58,19 @@ namespace Scenarios_UT
 
             Assert.IsTrue(methodName == "MethodRedirect.Scenario6.PublicVirtualInstanceMethod");
         }
-        
+
         [TestMethod]
         public void Redirect_PublicVirtualInstanceMethod_To_Lambda_WithParameter()
         {
-            Assembly assembly = Assembly.GetAssembly(typeof(Scenario6));
-            Type Scenario_Type = assembly.GetType("MethodRedirect.Scenario6");
+            Type Scenario_Type = typeof(Scenario6);
 
-            MethodInfo Scenario_PublicVirtualInstanceMethodWithParameter = Scenario_Type.GetMethod("PublicVirtualInstanceMethodWithParameter", BindingFlags.Instance | BindingFlags.Public);
-            
-            // Test redirection to lambda expression with parameter (must use explicit type for parameter)
-            var token = Scenario_PublicVirtualInstanceMethodWithParameter.RedirectTo((int x) =>
-            {
-                return "MethodRedirect.LambdaExpression.WithParameter." + x;
-            });
+            var token = MethodUtil.HookMethod(
+                MethodHook.From(Scenario_Type, "PublicVirtualInstanceMethodWithParameter"),
+                MethodHook.From((int x) =>
+                {
+                    return "MethodRedirect.LambdaExpression.WithParameter." + x;
+                })
+            );
 
             var scenario = (Scenario6)Activator.CreateInstance(Scenario_Type);
 
@@ -93,17 +89,16 @@ namespace Scenarios_UT
         [TestMethod]
         public void Redirect_AnotherPublicInstanceMethod_To_Lambda_WithParameter()
         {
-            Assembly assembly = Assembly.GetAssembly(typeof(Scenario6));
-            Type Scenario_Type = assembly.GetType("MethodRedirect.Scenario6");
+            Type Scenario_Type = typeof(Scenario6);
 
-            MethodInfo Scenario_AnotherPublicInstanceMethodWithParameter = Scenario_Type.GetMethod("AnotherPublicInstanceMethodWithParameter", BindingFlags.Instance | BindingFlags.Public);
-
-            // Test redirection to lambda expression with parameter and integer return value (must use explicit type for parameter)
-            var token = Scenario_AnotherPublicInstanceMethodWithParameter.RedirectTo((int x) =>
-            {
-                Debug.WriteLine("Lambda Expression Parameter = " + x.ToString());
-                return x + 10;
-            });
+            var token = MethodUtil.HookMethod(
+                MethodHook.From(Scenario_Type, "AnotherPublicInstanceMethodWithParameter"),
+                MethodHook.From((int x) =>
+                {
+                    Debug.WriteLine("Lambda Expression Parameter = " + x.ToString());
+                    return x + 10;
+                })
+            );
 
             var scenario = (Scenario6)Activator.CreateInstance(Scenario_Type);
 
